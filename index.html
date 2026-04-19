@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>EasyTab · разовая работа</title>
+    <!-- Подключаем CSS отдельно (стили) -->
+    <style>
+        /* ========== СТИЛИ (CSS) ========== */
+        /* СБРОС И ПЕРЕМЕННЫЕ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        :root {
+            --primary: #ff6b0b;
+            --primary-dark: #e55c00;
+            --bg-light: #f9f9fb;
+            --card-white: #ffffff;
+            --text-dark: #1e1e2f;
+            --text-gray: #6f7b8a;
+            --border-light: #f0f2f6;
+            --urgent-red: #ff3b30;
+        }
+
+        body {
+            background-color: #e5e9f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        /* Рамка телефона */
+        .phone-frame {
+            max-width: 400px;
+            width: 100%;
+            background: var(--bg-light);
+            border-radius: 44px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25), 0 0 0 8px #e8ecf2;
+            overflow: hidden;
+            height: 780px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Экраны (страницы) */
+        .app-screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            scrollbar-width: none;
+            background: var(--bg-light);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .app-screen.hidden-screen {
+            display: none !important;
+        }
+
+        /* Анимация появления */
+        .app-screen.slide-enter {
+            opacity: 0;
+            transform: translateX(20px);
+        }
+
+        /* Статус бар */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 14px 22px 8px;
+            font-weight: 600;
+            font-size: 15px;
+            background: var(--bg-light);
+            color: #111;
+        }
+
+        /* Шапка */
+        .header {
+            background: var(--primary);
+            padding: 12px 20px 18px 20px;
+            color: white;
+            border-bottom-left-radius: 28px;
+            border-bottom-right-radius: 28px;
+            box-shadow: 0 6px 16px rgba(255, 107, 11, 0.25);
+        }
+
+        .header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-icon {
+            background: white;
+            color: var(--primary);
+            width: 44px;
+            height: 44px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 28px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 24px;
+            letter-spacing: -0.5px;
+        }
+
+        .profile-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 16px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 15px;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Поиск */
+        .search-wrapper {
+            background: white;
+            border-radius: 30px;
+            padding: 4px 18px;
+display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .search-wrapper input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            padding: 14px 0;
+            background: transparent;
+        }
+
+        .search-wrapper button {
+            background: none;
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+            color: var(--primary);
+        }
+
+        /* Чипсы фильтров */
+        .filter-row {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding: 16px 0 8px 0;
+            scrollbar-width: none;
+            white-space: nowrap;
+        }
+
+        .filter-row::-webkit-scrollbar {
+            display: none;
+        }
+
+        .chip {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.35);
+            padding: 10px 22px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 15px;
+            color: white;
+            backdrop-filter: blur(2px);
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .chip.active {
+            background: white;
+            color: var(--primary);
+            border-color: white;
+        }
+
+        /* Контент */
+        .content {
+            flex: 1;
+            padding: 24px 20px 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 20px;
+        }
+
+        .section-header h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .badge-count {
+            background: #eaeef5;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--primary);
+        }
+
+        /* Карточка работы */
+        .job-card {
+            background: var(--card-white);
+            border-radius: 28px;
+            padding: 18px;
+            margin-bottom: 18px;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.02), 0 0 0 1px rgba(224, 224, 240, 0.6);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .job-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .job-icon {
+            background: #fff2e5;
+            width: 64px;
+            height: 64px;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: var(--primary);
+        }
+
+        .job-info {
+            flex: 1;
+        }
+
+        .job-info h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+        }
+
+        .job-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: #f2f5fa;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .price-tag {
+            background: #ff6b0b10;
+            color: var(--primary);
+            font-weight: 800;
+            font-size: 24px;
+            padding: 8px 18px;
+            border-radius: 40px;
+            border: 1px solid #ff6b0b20;
+            align-self: flex-start;
+        }
+
+        .meta-line {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 6px;
+        }
+
+        .time-distance {
+            display: flex;
+            gap: 16px;
+            color: var(--text-gray);
+          font-weight: 500;
+            font-size: 14px;
+        }
+
+        .apply-btn, .favorite-btn {
+            border: none;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.12s;
+        }
+
+        .apply-btn {
+            background: var(--primary);
+            color: white;
+            padding: 16px 32px;
+            font-size: 16px;
+            box-shadow: 0 10px 18px #ff6b0b40;
+            border: 1px solid #ff8c3a;
+        }
+
+        .apply-btn:active {
+            background: var(--primary-dark);
+            transform: scale(0.97);
+        }
+
+        .favorite-btn {
+            background: white;
+            color: var(--primary);
+            padding: 16px 20px;
+            font-size: 20px;
+            border: 1px solid #ffd8b7;
+        }
+
+        .urgent-badge {
+            background: #ff3b3020;
+            color: #d43b2c;
+            font-weight: 700;
+            font-size: 12px;
+            padding: 5px 12px;
+            border-radius: 30px;
+            border: 1px solid #ff3b3040;
+        }
+
+        /* Сетка кнопок */
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin: 20px 0 30px;
+        }
+
+        .action-btn {
+            background: white;
+            border: none;
+            border-radius: 28px;
+            padding: 16px 0;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-dark);
+            box-shadow: 0 5px 12px rgba(0,0,0,0.02);
+            border: 1px solid #edf2f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .action-btn span {
+            font-size: 24px;
+        }
+
+        .action-btn:active {
+            background: #f5f7fc;
+        }
+
+        /* Нижняя навигация */
+        .bottom-nav {
+            background: white;
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 16px 22px;
+            border-radius: 30px 30px 0 0;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.02);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #8895a7;
+            font-weight: 500;
+            font-size: 12px;
+            gap: 4px;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-item span:first-child {
+            font-size: 24px;
+        }
+
+        /* Экран избранного и брони */
+        .favorites-list, .bookings-list {
+            padding: 20px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #9aa7b9;
+            font-weight: 500;
+            background: white;
+            border-radius: 36px;
+            margin-top: 30px;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--primary);
+            margin-right: 10px;
+        }
+
+        /* Кнопка возврата */
+        .screen-header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .screen-header h2 {
+            font-size: 28px;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <!-- Статус бар -->
+        <div class="status-bar">
+            <span>9:41</span>
+            <span>📶 94% 🔋</span>
+        </div>
+
+        <!-- ГЛАВНЫЙ ЭКРАН (home) -->
+        <div id="homeScreen" class="app-screen">
+            <!-- Шапка -->
+            <div class="header">
+                <div class="header-row">
+                    <div class="logo-area">
+                        <div class="logo-icon">E</div>
+                        <div class="logo-text">asyTab</div>
+                        </div>
+                    <div class="profile-badge">
+                        <span>👤</span> Айдос · 300₸
+                    </div>
+                </div>
+                <div class="search-wrapper">
+                    <input type="text" placeholder="Грузчик, разнорабочий..." value="грузчик">
+                    <button>🔍</button>
+                </div>
+                <div class="filter-row">
+                    <span class="chip active">Все</span>
+                    <span class="chip">Грузчик</span>
+                    <span class="chip">Разнорабочий</span>
+                    <span class="chip">Курьер</span>
+                    <span class="chip">Такелаж</span>
+                </div>
+            </div>
+
+            <div class="content">
+                <!-- Кнопки навигации -->
+                <div class="buttons-grid">
+                    <button class="action-btn" onclick="navigateTo('favorites')"><span>❤️</span> Избранное</button>
+                    <button class="action-btn" onclick="navigateTo('bookings')"><span>📅</span> Бронь</button>
+                    <button class="action-btn" onclick="navigateTo('notifications')"><span>🔔</span> Уведом.</button>
+                    <button class="action-btn" onclick="navigateTo('profile')"><span>👤</span> Профиль</button>
+                </div>
+
+                <div class="section-header">
+                    <h2>Подработка рядом</h2>
+                    <span class="badge-count">24 объяв.</span>
+                </div>
+
+                <!-- Карточки работ (с data-id) -->
+                <div class="job-card" data-id="job1">
+                    <div class="job-row">
+                        <div class="job-icon">📦</div>
+                        <div class="job-info">
+                            <h3>Грузчик на склад (мешки до 25 кг)</h3>
+                            <div class="job-tags">
+                                <span class="tag">📍 м. Байконур</span>
+                                <span class="urgent-badge">⚡️ срочно</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="price-tag">3 500 ₸ / час</div>
+                    <div class="meta-line">
+                        <span class="time-distance">🕒 2 ч · сегодня 15:00</span>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="favorite-btn" onclick="toggleFavorite('job1', this)">🤍</button>
+                            <button class="apply-btn" onclick="bookJob('job1')">Отклик</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="job-card" data-id="job2">
+                    <div class="job-row">
+                        <div class="job-icon">🪑</div>
+                        <div class="job-info">
+                            <h3>Разнорабочий (помощь с переездом)</h3>
+                            <div class="job-tags">
+                                <span class="tag">📍 пр. Абая, 42</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="price-tag">2 800 ₸ / час</div>
+                    <div class="meta-line">
+                        <span class="time-distance">🚗 1.2 км · завтра 10:00</span>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="favorite-btn" onclick="toggleFavorite('job2', this)">🤍</button>
+                            <button class="apply-btn" onclick="bookJob('job2')">Отклик</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="job-card" data-id="job3">
+                    <div class="job-row">
+                        <div class="job-icon">🧱</div>
+                        <div class="job-info">
+                            <h3>Подсобные работы (стройка, мешки)</h3>
+                            <div class="job-tags">
+                                <span class="tag">📍 Нур-Султан, пр.Кабанбай</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="price-tag">4 200 ₸ смена</div>
+                    <div class="meta-line">
+                        <span class="time-distance">🕒 5 ч · завтра 9:00</span>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="favorite-btn" onclick="toggleFavorite('job3', this)">🤍</button>
+                            <button class="apply-btn" onclick="bookJob('job3')">Отклик</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="job-card" data-id="job4">
+                    <div class="job-row">
+                        <div class="job-icon">🧹</div>
+                        <div class="job-info">
+                            <h3>Уборка после ремонта + вынос</h3>
+                            <div class="job-tags">
+                                <span class="tag">📍 м. Абая</span>
+                                <span class="urgent-badge">⚡️ горит</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="price-tag">5 000 ₸</div>
+                    <div class="meta-line">
+                        <span class="time-distance">🕒 2-3 ч · сегодня</span>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="favorite-btn" onclick="toggleFavorite('job4', this)">🤍</button>
+                            <button class="apply-btn" onclick="bookJob('job4')">Отклик</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Нижняя навигация -->
+            <div class="bottom-nav">
+                <div class="nav-item active" onclick="navigateTo('home')">🏠<span>Главная</span></div>
+                <div class="nav-item" onclick="navigateTo('favorites')">❤️<span>Избранное</span></div>
+                <div class="nav-item" onclick="navigateTo('bookings')">📅<span>Бронь</span></div>
+                <div class="nav-item" onclick="navigateTo('notifications')">🔔<span>Увед.</span></div>
+                <div class="nav-item" onclick="navigateTo('profile')">👤<span>Профиль</span></div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН ИЗБРАННОЕ -->
+        <div id="favoritesScreen" class="app-screen hidden-screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('home')">←</button>
+                <h2>❤️ Избранное</h2>
+            </div>
+            <div id="favoritesList" class="favorites-list"></div>
+            <div class="bottom-nav">
+                <div class="nav-item" onclick="navigateTo('home')">🏠<span>Главная</span></div>
+                <div class="nav-item active" onclick="navigateTo('favorites')">❤️<span>Избранное</span></div>
+                <div class="nav-item" onclick="navigateTo('bookings')">📅<span>Бронь</span></div>
+                <div class="nav-item" onclick="navigateTo('notifications')">🔔<span>Увед.</span></div>
+                <div class="nav-item" onclick="navigateTo('profile')">👤<span>Профиль</span></div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН БРОНИРОВАНИЯ -->
+        <div id="bookingsScreen" class="app-screen hidden-screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('home')">←</button>
+                <h2>📅 Моя бронь</h2>
+            </div>
+            <div id="bookingsList" class="bookings-list"></div>
+            <div class="bottom-nav">
+                <div class="nav-item" onclick="navigateTo('home')">🏠<span>Главная</span></div>
+                <div class="nav-item" onclick="navigateTo('favorites')">❤️<span>Избранное</span></div>
+                <div class="nav-item active" onclick="navigateTo('bookings')">📅<span>Бронь</span></div>
+                <div class="nav-item" onclick="navigateTo('notifications')">🔔<span>Увед.</span></div>
+              <div class="nav-item" onclick="navigateTo('profile')">👤<span>Профиль</span></div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН УВЕДОМЛЕНИЙ -->
+        <div id="notificationsScreen" class="app-screen hidden-screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('home')">←</button>
+                <h2>🔔 Уведомления</h2>
+            </div>
+            <div style="padding: 20px;">
+                <div class="job-card">📢 Новая работа: грузчик рядом с вами</div>
+                <div class="job-card">⭐ Вакансия в избранном подешевела</div>
+            </div>
+            <div class="bottom-nav">
+                <div class="nav-item" onclick="navigateTo('home')">🏠<span>Главная</span></div>
+                <div class="nav-item" onclick="navigateTo('favorites')">❤️<span>Избранное</span></div>
+                <div class="nav-item" onclick="navigateTo('bookings')">📅<span>Бронь</span></div>
+                <div class="nav-item active" onclick="navigateTo('notifications')">🔔<span>Увед.</span></div>
+                <div class="nav-item" onclick="navigateTo('profile')">👤<span>Профиль</span></div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН ПРОФИЛЯ -->
+        <div id="profileScreen" class="app-screen hidden-screen">
+            <div class="screen-header">
+                <button class="back-btn" onclick="navigateTo('home')">←</button>
+                <h2>👤 Профиль</h2>
+            </div>
+            <div style="padding: 20px;">
+                <div class="job-card" style="text-align: center;">
+                    <div style="font-size: 80px;">👤</div>
+                    <h3>Айдос Сериков</h3>
+                    <p>Баланс: 300 ₸ · Kaspi</p>
+                    <button class="apply-btn" style="width: 100%;">Пополнить</button>
+                </div>
+            </div>
+            <div class="bottom-nav">
+                <div class="nav-item" onclick="navigateTo('home')">🏠<span>Главная</span></div>
+                <div class="nav-item" onclick="navigateTo('favorites')">❤️<span>Избранное</span></div>
+                <div class="nav-item" onclick="navigateTo('bookings')">📅<span>Бронь</span></div>
+                <div class="nav-item" onclick="navigateTo('notifications')">🔔<span>Увед.</span></div>
+                <div class="nav-item active" onclick="navigateTo('profile')">👤<span>Профиль</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT (JS) отдельно -->
+    <script>
+        // ========== JAVASCRIPT (JS) ==========
+        // Данные и состояние
+        let favorites = JSON.parse(localStorage.getItem('easyTabFavorites')) || [];
+        let bookings = JSON.parse(localStorage.getItem('easyTabBookings')) || [];
+
+        const jobsData = {
+            job1: { title: 'Грузчик на склад', price: '3 500 ₸ / час', location: 'м. Байконур', icon: '📦' },
+            job2: { title: 'Разнорабочий (переезд)', price: '2 800 ₸ / час', location: 'пр. Абая, 42', icon: '🪑' },
+            job3: { title: 'Подсобные работы (стройка)', price: '4 200 ₸ смена', location: 'Нур-Султан', icon: '🧱' },
+            job4: { title: 'Уборка после ремонта', price: '5 000 ₸', location: 'м. Абая', icon: '🧹' }
+        };
+
+        // Навигация между экранами с анимацией
+        window.navigateTo = function(screenName) {
+            const screens = ['homeScreen', 'favoritesScreen', 'bookingsScreen', 'notificationsScreen', 'profileScreen'];
+            const currentScreen = screens.find(id => !document.getElementById(id).classList.contains('hidden-screen'));
+            
+            screens.forEach(id => {
+                const screen = document.getElementById(id);
+                screen.classList.add('hidden-screen');
+                screen.classList.remove('slide-enter');
+            });
+
+            const nextScreen = document.getElementById(screenName + 'Screen');
+            nextScreen.classList.remove('hidden-screen');
+            nextScreen.classList.add('slide-enter');
+            
+            // Принудительный ререндер
+          if (screenName === 'favorites') renderFavorites();
+            if (screenName === 'bookings') renderBookings();
+
+            // Обновить активный пункт меню
+            updateActiveNav(screenName);
+        };
+
+        function updateActiveNav(screenName) {
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            const activeNav = document.querySelector(`.nav-item[onclick="navigateTo('${screenName}')"]`);
+            if (activeNav) activeNav.classList.add('active');
+        }
+
+        // Избранное
+        window.toggleFavorite = function(jobId, btn) {
+            if (favorites.includes(jobId)) {
+                favorites = favorites.filter(id => id !== jobId);
+                btn.innerText = '🤍';
+            } else {
+                favorites.push(jobId);
+                btn.innerText = '❤️';
+            }
+            localStorage.setItem('easyTabFavorites', JSON.stringify(favorites));
+            if (!document.getElementById('favoritesScreen').classList.contains('hidden-screen')) {
+                renderFavorites();
+            }
+        };
+
+        function renderFavorites() {
+            const container = document.getElementById('favoritesList');
+            if (!container) return;
+            if (favorites.length === 0) {
+                container.innerHTML = '<div class="empty-state">❤️ Нет избранных</div>';
+                return;
+            }
+            let html = '';
+            favorites.forEach(id => {
+                const job = jobsData[id];
+                if (!job) return;
+                html += `
+                    <div class="job-card">
+                        <div class="job-row">
+                            <div class="job-icon">${job.icon}</div>
+                            <div><h3>${job.title}</h3><span class="tag">📍 ${job.location}</span></div>
+                        </div>
+                        <div class="price-tag">${job.price}</div>
+                        <div class="meta-line">
+                            <span></span>
+                            <button class="apply-btn" onclick="bookJob('${id}'); navigateTo('bookings');">Забронировать</button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        // Бронирование
+        window.bookJob = function(jobId) {
+            if (!bookings.includes(jobId)) {
+                bookings.push(jobId);
+                localStorage.setItem('easyTabBookings', JSON.stringify(bookings));
+                alert('✅ Работа забронирована!');
+            } else {
+                alert('Уже в брони');
+            }
+            if (!document.getElementById('bookingsScreen').classList.contains('hidden-screen')) {
+                renderBookings();
+            }
+        };
+
+        function renderBookings() {
+            const container = document.getElementById('bookingsList');
+            if (!container) return;
+            if (bookings.length === 0) {
+                container.innerHTML = '<div class="empty-state">📭 Нет броней</div>';
+                return;
+            }
+            let html = '';
+            bookings.forEach(id => {
+                const job = jobsData[id];
+                if (!job) return;
+                html += `
+                    <div class="job-card">
+                        <div class="job-row">
+                            <div class="job-icon">${job.icon}</div>
+                            <div><h3>${job.title}</h3><span class="tag">📍 ${job.location}</span></div>
+                        </div>
+                        <div class="price-tag">${job.price}</div>
+                        <div class="meta-line">
+                            <span class="time-distance">✅ забронировано</span>
+                            <button class="favorite-btn" onclick="cancelBooking('${id}')">❌ отменить</button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        window.
+          cancelBooking = function(jobId) {
+            bookings = bookings.filter(id => id !== jobId);
+            localStorage.setItem('easyTabBookings', JSON.stringify(bookings));
+            renderBookings();
+        };
+
+        // Инициализация
+        window.onload = function() {
+            // Установить корректные сердечки
+            document.querySelectorAll('.job-card').forEach(card => {
+                const id = card.getAttribute('data-id');
+                const btn = card.querySelector('.favorite-btn');
+                if (id && btn) {
+                    btn.innerText = favorites.includes(id) ? '❤️' : '🤍';
+                }
+            });
+        };
+    </script>
+</body>
+</html>
+
+                                  
