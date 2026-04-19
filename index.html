@@ -13,59 +13,78 @@
             --text-dark: #2d3436;
             --white: #ffffff;
             --success: #27ae60;
+            --input-bg: #fff9e6;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg-cream); color: var(--text-dark); overflow-x: hidden; }
+        body { background: var(--bg-cream); color: var(--text-dark); overflow-x: hidden; line-height: 1.6; }
 
-        /* Mobile First & Responsiveness */
+        /* Навигация */
         nav {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 15px 5%; background: var(--primary-purple); color: white;
+            padding: 20px 50px; background: var(--primary-purple); color: white;
             position: sticky; top: 0; z-index: 1000;
         }
-        .logo { font-weight: 800; font-size: 22px; cursor: pointer; }
-        .nav-links a { color: white; text-decoration: none; margin-left: 15px; font-size: 13px; cursor: pointer; }
+        .logo { font-weight: 800; font-size: 26px; cursor: pointer; }
+        .nav-links a { color: white; text-decoration: none; margin-left: 25px; font-size: 14px; font-weight: 600; cursor: pointer; }
 
-        .page { display: none; min-height: 100vh; padding: 20px 5%; }
+        .page { display: none; min-height: 100vh; }
         .active { display: block; }
 
-        /* Toast Notifications */
-        #toast-container { position: fixed; top: 80px; right: 20px; z-index: 9999; }
+        /* Уведомления */
+        #toast-container { position: fixed; top: 100px; right: 20px; z-index: 9999; }
         .toast { 
-            background: var(--text-dark); color: white; padding: 15px 25px; 
-            border-radius: 10px; margin-bottom: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            background: #333; color: white; padding: 16px 24px; border-radius: 12px; 
+            margin-bottom: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.2);
             animation: slideIn 0.3s ease-out;
         }
 
-        /* Filter & Search Bar */
-        .controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
-        .controls input, .controls select { 
-            padding: 12px; border-radius: 10px; border: 1px solid #ddd; flex: 1; min-width: 150px;
+        /* Hero Секция (Главная) */
+        .hero { display: flex; background: var(--primary-purple); color: white; height: calc(100vh - 80px); align-items: center; }
+        .hero-content { flex: 1; padding: 0 80px; }
+        .hero h1 { font-size: 56px; line-height: 1.1; margin-bottom: 30px; font-weight: 800; }
+        .features-list { list-style: none; margin-bottom: 40px; }
+        .features-list li { margin-bottom: 15px; font-size: 18px; display: flex; align-items: center; }
+        
+        .hero-image-section { flex: 1; position: relative; height: 100%; }
+        .hero-bg-img { width: 100%; height: 100%; object-fit: cover; }
+        .floating-card { 
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: white; padding: 25px; border-radius: 20px; width: 340px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3); color: var(--text-dark);
         }
 
-        /* Cards */
+        /* Личные кабинеты и формы */
+        .container { max-width: 1100px; margin: 0 auto; padding: 60px 20px; }
+        .form-box { background: white; padding: 40px; border-radius: 24px; max-width: 500px; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+        .form-group input, .form-group select { width: 100%; padding: 16px; border-radius: 12px; border: 1px solid #eee; background: var(--input-bg); font-size: 15px; }
+
+        /* Списки и Поиск */
+        .controls { display: flex; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; }
+        .controls input, .controls select { padding: 15px; border-radius: 12px; border: 1px solid #ddd; flex: 1; min-width: 200px; }
+
         .order-card { 
-            background: white; padding: 20px; border-radius: 15px; margin-bottom: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-left: 5px solid var(--primary-purple);
+            background: white; padding: 25px; border-radius: 20px; margin-bottom: 20px;
+            border-left: 8px solid var(--primary-purple); box-shadow: 0 5px 15px rgba(0,0,0,0.03);
         }
-        .status-tag { display: inline-block; padding: 4px 8px; border-radius: 5px; font-size: 11px; font-weight: 700; margin-top: 5px; }
-        .status-open { background: #e1f5fe; color: #0288d1; }
+        .status-badge { display: inline-block; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; }
+        .status-open { background: #e3f2fd; color: #1976d2; }
         .status-taken { background: #fff3e0; color: #f57c00; }
-        .status-completed { background: #e8f5e9; color: #388e3c; }
+        .status-completed { background: #e8f5e9; color: #2e7d32; }
 
-        /* Rating Stars */
-        .rating { color: #f1c40f; cursor: pointer; font-size: 20px; }
+        .btn-action { width: 100%; padding: 18px; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .btn-purple { background: var(--primary-purple); color: white; }
+        .btn-success { background: var(--success); color: white; }
 
         @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
 
-        /* Hero Mobile Fix */
-        @media (max-width: 768px) {
-            .hero { flex-direction: column; text-align: center; }
-            .hero-content { padding: 40px 20px; }
-            .hero h1 { font-size: 32px; }
+        @media (max-width: 900px) {
+            .hero { flex-direction: column; text-align: center; height: auto; }
+            .hero-content { padding: 60px 20px; }
+            .hero h1 { font-size: 38px; }
             .hero-image-section { display: none; }
-            .business-section { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -77,89 +96,138 @@
     <div class="logo" onclick="showPage('home')">worklink</div>
     <div class="nav-links" id="guestNav">
         <a onclick="showPage('about')">О нас</a>
+        <a onclick="showPage('business_landing')">Для бизнеса</a>
         <a onclick="showPage('login')">Вход</a>
+        <a onclick="showPage('register')" style="background:rgba(255,255,255,0.2); padding:10px 20px; border-radius:10px">Регистрация</a>
     </div>
     <div class="nav-links" id="userNav" style="display:none">
-        <a id="panelLink">Панель</a>
+        <a id="panelBtn">Панель управления</a>
         <a onclick="logout()">Выйти</a>
     </div>
 </nav>
 
 <div id="home" class="page active">
-    <div style="text-align: center; padding-top: 50px;">
-        <h1>WorkLink</h1>
-        <p>Сервис быстрого поиска исполнителей</p>
-        <button onclick="showPage('register')" style="margin-top:20px; padding:15px 30px; border-radius:10px; border:none; background:var(--primary-purple); color:white; font-weight:700">Начать работу</button>
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Найти подработку<br>с помощью WorkLink</h1>
+            <ul class="features-list">
+                <li>💵 Доход до 45 000 тг в день</li>
+                <li>💼 Опыт работы не нужен</li>
+                <li>🕒 Выплаты в течение недели</li>
+            </ul>
+            <button class="btn-action btn-purple" style="width:auto; padding:20px 40px; background:white; color:var(--primary-purple)" onclick="showPage('register')">Начать сейчас</button>
+        </div>
+        <div class="hero-image-section">
+            <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2000" class="hero-bg-img">
+            <div class="floating-card">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px">
+                    <span style="font-weight:800; font-size:22px">13 200 ₸</span>
+                    <span style="background:#e8fdf5; color:#27ae60; padding:5px 10px; border-radius:8px; font-size:10px; font-weight:800">ПОВЫШЕННАЯ ЦЕНА</span>
+                </div>
+                <div style="color:gray; font-size:13px">🕒 08:00 - 20:00 · Сегодня</div>
+                <div style="font-weight:600; margin:10px 0">Услуги по погрузке-выгрузке</div>
+                <div style="color:var(--primary-purple); font-weight:700">📍 Заммлер Казахстан</div>
+            </div>
+        </div>
     </div>
 </div>
 
 <div id="about" class="page">
-    <div style="background:white; padding:30px; border-radius:20px;">
-        <h2>Что такое WorkLink</h2>
-        <p>Это платформа для бизнеса и самозанятых. Бизнес находит сотрудников, а люди — подработку рядом с домом.</p>
+    <div class="container">
+        <div style="background:white; padding:40px; border-radius:30px">
+            <h2>Что такое WorkLink</h2>
+            <p><strong>WorkLink</strong> — это сервис, который помогает компаниям быстро находить проверенных исполнителей на посменную работу.</p>
+            <h3 style="margin-top:25px">Как разместить заявку?</h3>
+            <ul>
+                <li>Войдите в личный кабинет по номеру телефона.</li>
+                <li>Создайте заявку, указав детали смены.</li>
+                <li>Дождитесь отклика (обычно до 30 минут).</li>
+            </ul>
+        </div>
     </div>
 </div>
 
-<div id="register" class="page">
-    <div style="max-width:400px; margin:auto; background:white; padding:30px; border-radius:20px;">
-        <h2>Регистрация</h2>
-        <input type="text" id="regPhone" placeholder="Телефон" style="width:100%; padding:12px; margin:10px 0;">
-        <input type="password" id="regPass" placeholder="Пароль" style="width:100%; padding:12px; margin:10px 0;">
-        <select id="regRole" style="width:100%; padding:12px; margin:10px 0;">
-            <option value="worker">Работник</option>
-            <option value="business">Бизнес</option>
-        </select>
-        <button onclick="handleAuth('reg')" style="width:100%; padding:15px; background:var(--primary-purple); color:white; border:none; border-radius:10px; font-weight:700">Создать аккаунт</button>
+<div id="business_landing" class="page">
+    <div class="container" style="display:grid; grid-template-columns: 1fr 1fr; gap:50px; align-items:center">
+        <div>
+            <p style="color:var(--primary-purple); font-weight:800; font-size:12px">ОСТАВЬТЕ ЗАЯВКУ</p>
+            <h2 style="font-size:42px; margin:15px 0">Подключайтесь к WorkLink уже завтра</h2>
+            <ul style="list-style:none; font-weight:600">
+                <li style="margin-bottom:15px">1. Заполните форму</li>
+                <li style="margin-bottom:15px">2. Получите предложение</li>
+                <li style="margin-bottom:15px">3. Создайте заявку</li>
+            </ul>
+        </div>
+        <div class="form-box" style="margin:0">
+            <div class="form-group"><label>Ваше Ф.И.О</label><input type="text" id="biz_fio" placeholder="Меня зовут..."></div>
+            <div class="form-group"><label>Компания</label><input type="text" id="biz_name" placeholder="WorkLink"></div>
+            <div class="form-group"><label>Телефон</label><input type="text" id="biz_phone" placeholder="+7 777..."></div>
+            <div class="form-group"><label>Город</label><input type="text" id="biz_city" placeholder="Алматы..."></div>
+            <button class="btn-action" style="background:#3d4451; color:white" onclick="submitPartner()">Оставить заявку</button>
+        </div>
     </div>
 </div>
 
 <div id="login" class="page">
-    <div style="max-width:400px; margin:auto; background:white; padding:30px; border-radius:20px;">
+    <div class="container"><div class="form-box">
         <h2>Вход</h2>
-        <input type="text" id="logPhone" placeholder="Телефон" style="width:100%; padding:12px; margin:10px 0;">
-        <input type="password" id="logPass" placeholder="Пароль" style="width:100%; padding:12px; margin:10px 0;">
-        <button onclick="handleAuth('log')" style="width:100%; padding:15px; background:var(--primary-purple); color:white; border:none; border-radius:10px; font-weight:700">Войти</button>
-    </div>
+        <div class="form-group"><label>Телефон</label><input type="text" id="logPhone"></div>
+        <div class="form-group"><label>Пароль</label><input type="password" id="logPass"></div>
+        <button class="btn-action btn-purple" onclick="auth('log')">Войти</button>
+    </div></div>
+</div>
+
+<div id="register" class="page">
+    <div class="container"><div class="form-box">
+        <h2>Регистрация</h2>
+        <div class="form-group"><label>Телефон</label><input type="text" id="regPhone"></div>
+        <div class="form-group"><label>Пароль</label><input type="password" id="regPass"></div>
+        <div class="form-group"><label>Роль</label><select id="regRole"><option value="worker">Работник</option><option value="business">Бизнес</option></select></div>
+        <button class="btn-action btn-purple" onclick="auth('reg')">Создать</button>
+    </div></div>
 </div>
 
 <div id="worker_panel" class="page">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-        <h2>Поиск работы</h2>
-        <button onclick="showPage('my_jobs')" style="padding:10px; border-radius:10px; border:none; background:var(--text-dark); color:white;">Мои заказы</button>
+    <div class="container">
+        <div style="display:flex; justify-content:space-between; margin-bottom:30px">
+            <h2>Доступные смены</h2>
+            <button class="btn-action btn-purple" style="width:auto" onclick="showPage('my_jobs')">Мои задачи</button>
+        </div>
+        <div class="controls">
+            <input type="text" id="sTitle" placeholder="Поиск по названию..." oninput="renderWorker()">
+            <input type="text" id="sCity" placeholder="Город..." oninput="renderWorker()">
+            <select id="sPrice" onchange="renderWorker()"><option value="new">Новые</option><option value="exp">Дорогие</option></select>
+        </div>
+        <div id="worker_list"></div>
     </div>
-    
-    <div class="controls">
-        <input type="text" id="searchJob" placeholder="Поиск по названию..." oninput="filterOrders()">
-        <input type="text" id="searchCity" placeholder="Город..." oninput="filterOrders()">
-        <select id="priceFilter" onchange="filterOrders()">
-            <option value="new">Сначала новые</option>
-            <option value="expensive">Сначала дорогие</option>
-        </select>
-    </div>
-    <div id="available_orders"></div>
 </div>
 
 <div id="my_jobs" class="page">
-    <button onclick="showPage('worker_panel')" style="margin-bottom:20px;">← Назад</button>
-    <h2>Мои принятые задачи</h2>
-    <div id="my_orders_list"></div>
+    <div class="container">
+        <button onclick="showPage('worker_panel')" style="border:none; background:none; cursor:pointer; font-weight:700">← К поиску</button>
+        <h2 style="margin-top:20px">Мои принятые заказы</h2>
+        <div id="my_list" style="margin-top:30px"></div>
+    </div>
 </div>
 
 <div id="business_panel" class="page">
-    <h2>Ваши заказы</h2>
-    <button onclick="showPage('create_order_page')" style="width:100%; padding:15px; margin:20px 0; background:var(--primary-purple); color:white; border:none; border-radius:10px;">+ Создать новый заказ</button>
-    <div id="business_orders_list"></div>
+    <div class="container">
+        <div style="display:flex; justify-content:space-between; margin-bottom:30px">
+            <h2>Ваши объявления</h2>
+            <button class="btn-action btn-purple" style="width:auto" onclick="showPage('create_order_page')">+ Создать</button>
+        </div>
+        <div id="biz_list"></div>
+    </div>
 </div>
 
 <div id="create_order_page" class="page">
-    <button onclick="showPage('business_panel')">← Отмена</button>
-    <div style="max-width:500px; margin:20px auto; background:white; padding:30px; border-radius:20px;">
-        <h3>Детали заказа</h3>
-        <input type="text" id="ordTitle" placeholder="Название (напр. Грузчик)" style="width:100%; margin:10px 0; padding:12px;">
-        <input type="number" id="ordPrice" placeholder="Оплата ₸" style="width:100%; margin:10px 0; padding:12px;">
-        <input type="text" id="ordCity" placeholder="Город" style="width:100%; margin:10px 0; padding:12px;">
-        <button onclick="createOrder()" style="width:100%; padding:15px; background:var(--success); color:white; border:none; border-radius:10px;">Опубликовать</button>
-    </div>
+    <div class="container"><div class="form-box">
+        <h2>Детали задачи</h2>
+        <div class="form-group"><label>Название</label><input type="text" id="oTitle"></div>
+        <div class="form-group"><label>Оплата (₸)</label><input type="number" id="oPrice"></div>
+        <div class="form-group"><label>Город</label><input type="text" id="oCity"></div>
+        <button class="btn-action btn-success" onclick="postOrder()">Опубликовать</button>
+    </div></div>
 </div>
 
 <script type="module">
@@ -177,15 +245,13 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
-    let currentUser = JSON.parse(localStorage.getItem('wl_user')) || null;
+    let user = JSON.parse(localStorage.getItem('wl_session')) || null;
 
-    function toast(text) {
-        const container = document.getElementById('toast-container');
+    function toast(txt) {
+        const c = document.getElementById('toast-container');
         const t = document.createElement('div');
-        t.className = 'toast';
-        t.innerText = text;
-        container.appendChild(t);
-        setTimeout(() => t.remove(), 3000);
+        t.className = 'toast'; t.innerText = txt;
+        c.appendChild(t); setTimeout(() => t.remove(), 3000);
     }
 
     window.showPage = (id) => {
@@ -194,155 +260,99 @@
         window.scrollTo(0,0);
     };
 
-    window.handleAuth = async (type) => {
-        const phone = document.getElementById(type === 'reg' ? 'regPhone' : 'logPhone').value;
-        const pass = document.getElementById(type === 'reg' ? 'regPass' : 'logPass').value;
-        
-        if (type === 'reg') {
-            const role = document.getElementById('regRole').value;
-            await set(ref(db, 'users/' + phone), { phone, password: pass, role });
-            toast("Регистрация успешна!");
-            showPage('login');
+    window.auth = async (type) => {
+        const p = document.getElementById(type+'Phone').value;
+        const s = document.getElementById(type+'Pass').value;
+        if(type === 'reg') {
+            const r = document.getElementById('regRole').value;
+            await set(ref(db, 'users/'+p), { phone: p, pass: s, role: r });
+            toast("Успех! Теперь войдите."); showPage('login');
         } else {
-            const snap = await get(child(ref(db), `users/${phone}`));
-            if(snap.exists() && snap.val().password === pass) {
-                currentUser = snap.val();
-                localStorage.setItem('wl_user', JSON.stringify(currentUser));
-                initUser();
-            } else toast("Ошибка входа!");
+            const sn = await get(child(ref(db), `users/${p}`));
+            if(sn.exists() && sn.val().pass === s) {
+                user = sn.val(); localStorage.setItem('wl_session', JSON.stringify(user));
+                initSession();
+            } else toast("Ошибка!");
         }
     };
 
-    function initUser() {
-        if(!currentUser) return;
+    function initSession() {
+        if(!user) return;
         document.getElementById('guestNav').style.display = 'none';
         document.getElementById('userNav').style.display = 'flex';
-        const link = document.getElementById('panelLink');
-        if(currentUser.role === 'business') {
-            link.onclick = () => showPage('business_panel');
-            loadBusinessOrders();
+        const btn = document.getElementById('panelBtn');
+        if(user.role === 'business') {
+            btn.onclick = () => showPage('business_panel');
+            onValue(ref(db, 'orders'), renderBiz);
+            showPage('business_panel');
         } else {
-            link.onclick = () => showPage('worker_panel');
-            loadWorkerOrders();
+            btn.onclick = () => showPage('worker_panel');
+            onValue(ref(db, 'orders'), (sn) => { window.ordersData = sn.val(); renderWorker(); renderMy(); });
+            showPage('worker_panel');
         }
-        showPage(currentUser.role === 'business' ? 'business_panel' : 'worker_panel');
     }
 
-    // БИЗНЕС ЛОГИКА
-    window.createOrder = async () => {
-        const title = document.getElementById('ordTitle').value;
-        const price = Number(document.getElementById('ordPrice').value);
-        const city = document.getElementById('ordCity').value;
-        await push(ref(db, 'orders'), { 
-            title, price, city, 
-            status: 'open', 
-            owner: currentUser.phone,
-            timestamp: Date.now() 
+    window.postOrder = async () => {
+        await push(ref(db, 'orders'), {
+            title: document.getElementById('oTitle').value,
+            price: Number(document.getElementById('oPrice').value),
+            city: document.getElementById('oCity').value,
+            status: 'open', owner: user.phone, time: Date.now()
         });
-        toast("Заказ опубликован!");
-        showPage('business_panel');
+        toast("Создано!"); showPage('business_panel');
     };
 
-    function loadBusinessOrders() {
-        onValue(ref(db, 'orders'), (snap) => {
-            const list = document.getElementById('business_orders_list');
-            list.innerHTML = "";
-            const data = snap.val();
-            for(let id in data) {
-                if(data[id].owner === currentUser.phone) {
-                    const el = document.createElement('div');
-                    el.className = 'order-card';
-                    let workerInfo = data[id].worker ? `<br><b>Исполнитель:</b> ${data[id].worker}` : '';
-                    let ratingHtml = data[id].status === 'completed' && !data[id].rating ? 
-                        `<div class="rating" onclick="rateWorker('${id}')">☆☆☆☆☆ (Оценить)</div>` : '';
-                    
-                    el.innerHTML = `
-                        <h3>${data[id].title}</h3>
-                        <p>${data[id].price} ₸ | ${data[id].city}</p>
-                        <span class="status-tag status-${data[id].status}">${data[id].status.toUpperCase()}</span>
-                        ${workerInfo}
-                        ${ratingHtml}
-                    `;
-                    list.appendChild(el);
-                }
-            }
-        });
-    }
-
-    // РАБОТНИК ЛОГИКА
-    function loadWorkerOrders() {
-        onValue(ref(db, 'orders'), (snap) => {
-            const data = snap.val();
-            window.allOrders = data;
-            filterOrders();
-            renderMyJobs(data);
-        });
-    }
-
-    window.filterOrders = () => {
-        const query = document.getElementById('searchJob').value.toLowerCase();
-        const cityQuery = document.getElementById('searchCity').value.toLowerCase();
-        const sort = document.getElementById('priceFilter').value;
-        const list = document.getElementById('available_orders');
-        list.innerHTML = "";
-
-        let filtered = Object.keys(window.allOrders || {}).map(id => ({id, ...window.allOrders[id]}))
-            .filter(o => o.status === 'open' && o.title.toLowerCase().includes(query) && o.city.toLowerCase().includes(cityQuery));
-
-        if(sort === 'expensive') filtered.sort((a,b) => b.price - a.price);
-        else filtered.sort((a,b) => b.timestamp - a.timestamp);
-
-        filtered.forEach(o => {
-            const el = document.createElement('div');
-            el.className = 'order-card';
-            el.innerHTML = `
-                <h3>${o.title}</h3>
-                <p style="color:var(--primary-purple); font-weight:700">${o.price} ₸</p>
-                <p>📍 ${o.city}</p>
-                <button onclick="takeJob('${o.id}')" style="margin-top:10px; width:100%; padding:10px; border-radius:8px; border:none; background:var(--success); color:white;">Принять работу</button>
-            `;
-            list.appendChild(el);
-        });
-    };
-
-    function renderMyJobs(data) {
-        const list = document.getElementById('my_orders_list');
-        list.innerHTML = "";
+    function renderBiz(sn) {
+        const list = document.getElementById('biz_list'); list.innerHTML = "";
+        const data = sn.val();
         for(let id in data) {
-            if(data[id].worker === currentUser.phone && data[id].status === 'taken') {
-                const el = document.createElement('div');
-                el.className = 'order-card';
-                el.innerHTML = `
-                    <h3>${data[id].title}</h3>
-                    <p>${data[id].price} ₸</p>
-                    <button onclick="completeJob('${id}')" style="width:100%; padding:10px; background:var(--text-dark); color:white; border-radius:8px; border:none; margin-top:10px;">Завершить работу</button>
-                `;
+            if(data[id].owner === user.phone) {
+                const el = document.createElement('div'); el.className = 'order-card';
+                el.innerHTML = `<span class="status-badge status-${data[id].status}">${data[id].status}</span>
+                <h3>${data[id].title}</h3><p>${data[id].price} ₸</p>
+                ${data[id].status === 'completed' && !data[id].rating ? `<button onclick="rate('${id}')">⭐ Оценить</button>` : ''}`;
                 list.appendChild(el);
             }
         }
     }
 
-    window.takeJob = async (id) => {
-        await update(ref(db, `orders/${id}`), { status: 'taken', worker: currentUser.phone });
-        toast("Заказ добавлен в 'Мои заказы'!");
+    window.renderWorker = () => {
+        const list = document.getElementById('worker_list'); list.innerHTML = "";
+        const q = document.getElementById('sTitle').value.toLowerCase();
+        const c = document.getElementById('sCity').value.toLowerCase();
+        let items = Object.keys(window.ordersData || {}).map(id => ({id, ...window.ordersData[id]}))
+            .filter(i => i.status === 'open' && i.title.toLowerCase().includes(q) && i.city.toLowerCase().includes(c));
+        
+        if(document.getElementById('sPrice').value === 'exp') items.sort((a,b) => b.price - a.price);
+        
+        items.forEach(i => {
+            const el = document.createElement('div'); el.className = 'order-card';
+            el.innerHTML = `<h3>${i.title}</h3><p style="color:var(--primary-purple); font-weight:800">${i.price} ₸</p><p>📍 ${i.city}</p>
+            <button class="btn-action btn-success" style="margin-top:15px" onclick="take('${i.id}')">Принять</button>`;
+            list.appendChild(el);
+        });
     };
 
-    window.completeJob = async (id) => {
-        await update(ref(db, `orders/${id}`), { status: 'completed' });
-        toast("Работа завершена! Ожидайте оценки.");
-    };
-
-    window.rateWorker = async (id) => {
-        const stars = prompt("Оцените работника от 1 до 5:");
-        if(stars >= 1 && stars <= 5) {
-            await update(ref(db, `orders/${id}`), { rating: stars });
-            toast("Спасибо за оценку!");
+    function renderMy() {
+        const list = document.getElementById('my_list'); list.innerHTML = "";
+        const d = window.ordersData;
+        for(let id in d) {
+            if(d[id].worker === user.phone && d[id].status === 'taken') {
+                const el = document.createElement('div'); el.className = 'order-card';
+                el.innerHTML = `<h3>${d[id].title}</h3><p>${d[id].price} ₸</p>
+                <button class="btn-action btn-purple" onclick="finish('${id}')">Завершить</button>`;
+                list.appendChild(el);
+            }
         }
-    };
+    }
 
+    window.take = (id) => update(ref(db, `orders/${id}`), { status: 'taken', worker: user.phone });
+    window.finish = (id) => update(ref(db, `orders/${id}`), { status: 'completed' });
+    window.rate = (id) => { const r = prompt("Оценка 1-5:"); if(r) update(ref(db, `orders/${id}`), { rating: r }); };
+    window.submitPartner = () => { push(ref(db, 'partners'), { fio: document.getElementById('biz_fio').value }); toast("Отправлено!"); };
     window.logout = () => { localStorage.clear(); location.reload(); };
 
-    if(currentUser) initUser();
+    if(user) initSession();
 </script>
 </body>
 </html>
