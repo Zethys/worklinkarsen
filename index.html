@@ -3,303 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WorkLink PRO — Ultimate Infrastructure</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <title>WorkLink — Ultimate Ecosystem</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #6c38ff;
-            --primary-glow: rgba(108, 56, 255, 0.3);
-            --bg: #f8f9fd;
+            --primary-dark: #562cd9;
+            --bg: #ffffff;
             --card-bg: #ffffff;
-            --text: #1a1a1a;
-            --text-muted: #636e72;
-            --success: #00b894;
-            --danger: #ff4757;
-            --warning: #ffa502;
-            --border: #e2e8f0;
-            --radius-xl: 30px;
-            --radius-lg: 20px;
-            --shadow-soft: 0 10px 30px rgba(0,0,0,0.04);
-        }
-
-        [data-theme="dark"] {
-            --bg: #0b0e14;
-            --card-bg: #161b22;
-            --text: #f0f6fc;
-            --text-muted: #8b949e;
-            --border: #30363d;
-            --input-bg: #0d1117;
+            --text: #1b1b1b;
+            --success: #27ae60;
+            --input-bg: #f3f4f6;
+            --star: #f1c40f;
+            --accent: #ff4757;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); color: var(--text); transition: 0.3s; overflow-x: hidden; }
+        body { background: var(--bg); color: var(--text); transition: 0.3s; line-height: 1.6; }
 
-        /* --- NAVIGATION --- */
+        /* Navigation */
         nav {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 15px 5%; background: var(--card-bg); border-bottom: 1px solid var(--border);
-            position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(12px);
+            padding: 20px 50px; background: var(--primary); color: white;
+            position: sticky; top: 0; z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-        .logo { font-weight: 900; font-size: 24px; color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 10px; }
-        .nav-links { display: flex; gap: 25px; align-items: center; }
-        .nav-links a { text-decoration: none; color: var(--text-muted); font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s; }
-        .nav-links a:hover { color: var(--primary); }
+        .logo { font-weight: 800; font-size: 28px; cursor: pointer; }
+        .nav-links { display: flex; align-items: center; }
+        .nav-links a { color: white; text-decoration: none; margin-left: 25px; font-size: 14px; font-weight: 600; cursor: pointer; }
 
-        .user-panel { display: flex; align-items: center; gap: 15px; }
-        .avatar-mini { width: 35px; height: 35px; border-radius: 10px; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; cursor: pointer; }
-
-        /* --- BUTTONS --- */
-        .btn { padding: 12px 24px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; }
-        .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 15px var(--primary-glow); }
-        .btn-danger { background: var(--danger); color: white; }
-        .btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
-        .btn:hover { transform: translateY(-2px); opacity: 0.9; }
-
-        /* --- LAYOUT --- */
-        .page { display: none; padding: 40px 5%; animation: fadeIn 0.4s ease; }
-        .page.active { display: block; }
+        .page { display: none; min-height: 100vh; padding-bottom: 80px; }
+        .active { display: block; animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        .card { background: var(--card-bg); padding: 30px; border-radius: 24px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); }
 
-        .card { background: var(--card-bg); padding: 30px; border-radius: var(--radius-lg); border: 1px solid var(--border); box-shadow: var(--shadow-soft); margin-bottom: 20px; }
+        /* HERO */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            padding: 80px 0;
+        }
+        .hero h1 { font-size: 54px; line-height: 1.1; }
+        .hero p { font-size: 18px; margin: 20px 0; color: #555; }
+        .hero-img {
+            width: 420px;
+            border-radius: 30px;
+            animation: float 4s ease-in-out infinite;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
 
-        /* --- PROFILE --- */
-        .profile-grid { display: grid; grid-template-columns: 320px 1fr; gap: 30px; }
-        .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .stat-item { background: var(--bg); padding: 15px; border-radius: 15px; text-align: center; border: 1px solid var(--border); }
-        .stat-item h4 { font-size: 20px; color: var(--primary); }
-        .stat-item p { font-size: 11px; color: var(--text-muted); text-transform: uppercase; }
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; }
+        .badge-pro { background: linear-gradient(90deg, #f1c40f, #f39c12); color: white; }
+        .badge-cat { background: var(--primary); color: white; }
 
-        /* --- TOASTS --- */
-        #toast-box { position: fixed; bottom: 30px; right: 30px; z-index: 9999; }
-        .toast { background: var(--card-bg); color: var(--text); padding: 16px 24px; border-radius: 16px; margin-top: 10px; border-left: 5px solid var(--primary); box-shadow: 0 15px 40px rgba(0,0,0,0.1); animation: slideIn 0.3s ease; display: flex; align-items: center; gap: 12px; }
-        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        .level-bar { height: 10px; background: #eee; border-radius: 5px; margin: 10px 0; overflow: hidden; }
+        .level-progress { height: 100%; background: var(--success); transition: 0.5s; }
 
-        /* --- MODALS --- */
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 2000; display: none; align-items: center; justify-content: center; }
-        .modal { background: var(--card-bg); padding: 40px; border-radius: var(--radius-xl); width: 90%; max-width: 500px; position: relative; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; align-items: center; justify-content: center; }
+        .modal-content { background: white; padding: 40px; border-radius: 30px; width: 90%; max-width: 500px; }
 
-        /* --- THEME TOGGLE --- */
-        .theme-switch { width: 45px; height: 24px; background: var(--border); border-radius: 20px; position: relative; cursor: pointer; }
-        .theme-switch::after { content: ''; width: 18px; height: 18px; background: var(--primary); position: absolute; top: 3px; left: 3px; border-radius: 50%; transition: 0.3s; }
-        [data-theme="dark"] .theme-switch::after { left: 24px; }
+        .btn { padding: 16px 25px; border-radius: 14px; border: none; font-weight: 700; cursor: pointer; }
+        .btn-main { background: var(--primary); color: white; }
+        .btn-ghost { background: #f3f4f6; }
+
+        .input-group input, .input-group select, .input-group textarea {
+            width: 100%; padding: 16px; border-radius: 14px; border: none; background: var(--input-bg);
+        }
+
+        #toasts { position: fixed; top: 100px; right: 20px; }
+        .toast { background: var(--primary); color: white; padding: 15px 25px; border-radius: 12px; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
-<div id="toast-box"></div>
-
-<div id="modal-logout" class="overlay">
-    <div class="modal">
-        <h2 style="margin-bottom: 15px;">Завершить сессию?</h2>
-        <p style="color: var(--text-muted); margin-bottom: 25px;">Вы выйдете из своего аккаунта. Для доступа к заказам потребуется повторная авторизация.</p>
-        <div style="display: flex; gap: 10px;">
-            <button class="btn btn-danger" style="flex: 1;" onclick="confirmLogout()">Выйти</button>
-            <button class="btn btn-ghost" style="flex: 1;" onclick="closeModals()">Отмена</button>
-        </div>
-    </div>
-</div>
+<div id="toasts"></div>
 
 <nav>
-    <a href="#" class="logo" onclick="showPage('home')">WORKLINK <span>PRO</span></a>
-    
+    <div class="logo" onclick="showPage('home')">worklink</div>
     <div class="nav-links">
         <a onclick="showPage('home')">Главная</a>
-        <a onclick="showPage('market')">Биржа</a>
-        <a onclick="showPage('business')">Бизнесу</a>
-    </div>
-
-    <div class="user-panel">
-        <div class="theme-switch" onclick="toggleTheme()"></div>
-        
-        <div id="guest-ui">
-            <button class="btn btn-ghost" onclick="showPage('login')">Вход</button>
-            <button class="btn btn-primary" onclick="showPage('register')">Начать</button>
-        </div>
-
-        <div id="user-ui" style="display: none;">
-            <span id="nav-balance" style="font-weight: 800; color: var(--success); margin-right: 10px;">0 ₸</span>
-            <div class="avatar-mini" onclick="showPage('profile')" id="nav-avatar">U</div>
-            <button class="btn btn-ghost" style="padding: 8px; border: none;" onclick="openLogoutModal()" title="Выйти">
-                🚪
-            </button>
-        </div>
+        <a onclick="showPage('profile')">Профиль</a>
+        <a onclick="showPage('worker_panel')">Работа</a>
     </div>
 </nav>
 
-<div id="page-home" class="page active">
-    <div class="card" style="text-align: center; padding: 100px 20px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white;">
-        <h1 style="font-size: 48px; margin-bottom: 20px;">Зарабатывайте на своих навыках</h1>
-        <p style="font-size: 18px; opacity: 0.9; margin-bottom: 40px;">Платформа №1 для профессионалов и заказчиков нового поколения.</p>
-        <button class="btn btn-primary" style="background: white; color: var(--primary); padding: 15px 40px;" onclick="showPage('market')">Просмотреть заказы</button>
-    </div>
-</div>
-
-<div id="page-profile" class="page">
-    <div class="container">
-        <div class="profile-grid">
-            <div class="sidebar">
-                <div class="card" style="text-align: center;">
-                    <div id="prof-avatar" style="width: 100px; height: 100px; background: var(--primary); color: white; border-radius: 30px; display: flex; align-items: center; justify-content: center; font-size: 40px; font-weight: 900; margin: 0 auto 20px;">U</div>
-                    <h2 id="prof-name">Загрузка...</h2>
-                    <p id="prof-role" style="color: var(--text-muted); margin-bottom: 20px;">Пользователь</p>
-                    <button class="btn btn-primary" style="width: 100%; margin-bottom: 10px;">Редактировать</button>
-                    <button class="btn btn-danger" style="width: 100%; background: none; color: var(--danger); border: 1px solid var(--danger);" onclick="openLogoutModal()">Выйти из аккаунта</button>
-                </div>
-            </div>
-
-            <div class="main-content">
-                <div class="card">
-                    <h3>Финансовая сводка</h3>
-                    <div class="stats-row">
-                        <div class="stat-item">
-                            <p>Баланс</p>
-                            <h4 id="stat-balance">0 ₸</h4>
-                        </div>
-                        <div class="stat-item">
-                            <p>Заработано</p>
-                            <h4 style="color: var(--success);">+0 ₸</h4>
-                        </div>
-                        <div class="stat-item">
-                            <p>Рейтинг</p>
-                            <h4>5.0 ★</h4>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h3>История активности</h3>
-                    <div id="activity-log" style="margin-top: 15px;">
-                        <p style="color: var(--text-muted);">История пуста</p>
-                    </div>
-                </div>
-            </div>
+<!-- HOME -->
+<div id="home" class="page active">
+    <div class="container hero">
+        <div>
+            <h1>Работа будущего уже здесь</h1>
+            <p>Опыт = деньги. Рейтинг = статус. Добро пожаловать в новую экономику.</p>
+            <button class="btn btn-main" onclick="showPage('register')">Начать</button>
         </div>
+        <img class="hero-img" src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d" alt="hero">
     </div>
 </div>
 
-<div id="page-login" class="page">
-    <div class="card" style="max-width: 400px; margin: 50px auto;">
-        <h2 style="margin-bottom: 25px; text-align: center;">С возвращением</h2>
-        <input type="text" id="log-phone" placeholder="Телефон" style="width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg); color: var(--text);">
-        <input type="password" id="log-pass" placeholder="Пароль" style="width: 100%; padding: 15px; margin-bottom: 20px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg); color: var(--text);">
-        <button class="btn btn-primary" style="width: 100%;" onclick="handleAuth('login')">Войти</button>
+<!-- PROFILE -->
+<div id="profile" class="page">
+<div class="container">
+    <div class="card">
+        <h2>Профиль</h2>
+        <p>Уровень: <span id="levelText">1</span></p>
+        <div class="level-bar"><div id="levelProgress" class="level-progress" style="width:10%"></div></div>
+        <button class="btn btn-main" onclick="addFundsBusiness()">Пополнить (Бизнес)</button>
     </div>
 </div>
+</div>
 
-<div id="page-register" class="page">
-    <div class="card" style="max-width: 400px; margin: 50px auto;">
-        <h2 style="margin-bottom: 25px; text-align: center;">Регистрация</h2>
-        <select id="reg-role" style="width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg); color: var(--text);">
-            <option value="worker">Я исполнитель</option>
-            <option value="business">Я заказчик</option>
-        </select>
-        <input type="text" id="reg-phone" placeholder="Номер телефона" style="width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg); color: var(--text);">
-        <input type="password" id="reg-pass" placeholder="Придумайте пароль" style="width: 100%; padding: 15px; margin-bottom: 20px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg); color: var(--text);">
-        <button class="btn btn-primary" style="width: 100%;" onclick="handleAuth('reg')">Создать профиль</button>
-    </div>
+<div id="worker_panel" class="page"><div class="container">
+<h2>Задачи</h2>
+<div id="jobList"></div>
+</div></div>
+
+<div id="chatModal" class="modal">
+<div class="modal-content">
+<h2>Чат</h2>
+<textarea style="width:100%; height:200px;"></textarea>
+<button class="btn btn-main" onclick="closeModal()">Закрыть</button>
+</div>
 </div>
 
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getDatabase, ref, set, get, child, onValue, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getDatabase, ref, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyAjSLp9bkzKz71GytZU1Jz5bQoNMKB5Fxo",
-        authDomain: "worklink-5384c.firebaseapp.com",
-        databaseURL: "https://worklink-5384c-default-rtdb.firebaseio.com/",
-        projectId: "worklink-5384c",
-        storageBucket: "worklink-5384c.firebasestorage.app",
-        appId: "1:582114312352:web:08dea19f81f35abfe649c5"
-    };
+const app = initializeApp({
+apiKey:"X",
+databaseURL:"https://worklink-5384c-default-rtdb.firebaseio.com"
+});
+const db=getDatabase(app);
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    let user = JSON.parse(localStorage.getItem('wl_pro_session')) || null;
+let user=JSON.parse(localStorage.getItem('wl_session'));
 
-    // --- СИСТЕМНЫЕ ФУНКЦИИ ---
-    window.showPage = (id) => {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        const target = document.getElementById('page-' + id);
-        if(target) target.classList.add('active');
-        window.scrollTo(0, 0);
-    };
+window.addFundsBusiness = async () => {
+    if(!user || user.role!=='business') return alert('Только бизнес аккаунт');
+    let amt = prompt('Сумма пополнения');
+    amt = Number(amt);
+    if(!amt) return;
+    await update(ref(db,'users/'+user.phone), { balance: (user.balance||0)+amt });
+    alert('Баланс пополнен');
+};
 
-    window.toast = (msg) => {
-        const t = document.createElement('div');
-        t.className = 'toast';
-        t.innerHTML = `<span>✨</span> ${msg}`;
-        document.getElementById('toast-box').appendChild(t);
-        setTimeout(() => t.remove(), 4000);
-    };
+window.completeJob = async (id, exp=20) => {
+    await update(ref(db,'orders/'+id), {status:'done'});
+    await update(ref(db,'users/'+user.phone), { exp: (user.exp||0)+exp });
+};
 
-    window.toggleTheme = () => {
-        const body = document.body;
-        const theme = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-        body.setAttribute('data-theme', theme);
-    };
+window.showPage=(id)=>{
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+};
 
-    // --- ВЫХОД (ИСПРАВЛЕНО) ---
-    window.openLogoutModal = () => {
-        document.getElementById('modal-logout').style.display = 'flex';
-    };
-
-    window.closeModals = () => {
-        document.querySelectorAll('.overlay').forEach(o => o.style.display = 'none');
-    };
-
-    window.confirmLogout = () => {
-        localStorage.removeItem('wl_pro_session');
-        user = null;
-        toast("Вы успешно вышли");
-        setTimeout(() => location.reload(), 1000); // Перезагрузка для очистки всех состояний
-    };
-
-    // --- АВТОРИЗАЦИЯ ---
-    window.handleAuth = async (mode) => {
-        const phone = document.getElementById(`${mode === 'reg' ? 'reg' : 'log'}-phone`).value;
-        const pass = document.getElementById(`${mode === 'reg' ? 'reg' : 'log'}-pass`).value;
-
-        if(!phone || !pass) return toast("Заполните поля");
-
-        if(mode === 'reg') {
-            const role = document.getElementById('reg-role').value;
-            const newUser = { phone, pass, role, balance: 0, exp: 0, log: [{time: Date.now(), act: 'Регистрация'}] };
-            await set(ref(db, 'users/' + phone), newUser);
-            toast("Аккаунт создан!");
-            showPage('login');
-        } else {
-            const sn = await get(child(ref(db), 'users/' + phone));
-            if(sn.exists() && sn.val().pass === pass) {
-                user = sn.val();
-                localStorage.setItem('wl_pro_session', JSON.stringify(user));
-                initSession();
-                toast("Вход выполнен");
-                showPage('profile');
-            } else {
-                toast("Ошибка входа");
-            }
-        }
-    };
-
-    function initSession() {
-        if(!user) return;
-        document.getElementById('guest-ui').style.display = 'none';
-        document.getElementById('user-ui').style.display = 'flex';
-        document.getElementById('nav-avatar').innerText = user.phone[0].toUpperCase();
-
-        onValue(ref(db, 'users/' + user.phone), (sn) => {
-            const d = sn.val();
-            if(!d) return;
-            document.getElementById('nav-balance').innerText = `${d.balance} ₸`;
-            document.getElementById('stat-balance').innerText = `${d.balance} ₸`;
-            document.getElementById('prof-name').innerText = d.phone;
-            document.getElementById('prof-avatar').innerText = d.phone[0].toUpperCase();
-            document.getElementById('prof-role').innerText = d.role === 'business' ? 'Заказчик (Бизнес)' : 'Исполнитель (Pro)';
-        });
-    }
-
-    if(user) initSession();
+window.closeModal=()=>document.getElementById('chatModal').style.display='none';
 
 </script>
+
 </body>
 </html>
