@@ -3,170 +3,346 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WorkLink — Ultimate Ecosystem</title>
+    <title>WorkLink - Платформа подработки</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #6c38ff;
-            --primary-dark: #562cd9;
-            --bg: #ffffff;
-            --card-bg: #ffffff;
-            --text: #1b1b1b;
+            --primary-purple: #6c38ff;
+            --light-purple: #f0ebff;
+            --bg-cream: #fdf6e3;
+            --text-dark: #2d3436;
+            --white: #ffffff;
             --success: #27ae60;
-            --input-bg: #f3f4f6;
-            --star: #f1c40f;
-            --accent: #ff4757;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg); color: var(--text); transition: 0.3s; line-height: 1.6; }
+        body { background: var(--bg-cream); color: var(--text-dark); overflow-x: hidden; }
 
-        /* Navigation */
+        /* Mobile First & Responsiveness */
         nav {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 20px 50px; background: var(--primary); color: white;
+            padding: 15px 5%; background: var(--primary-purple); color: white;
             position: sticky; top: 0; z-index: 1000;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-        .logo { font-weight: 800; font-size: 28px; cursor: pointer; }
-        .nav-links { display: flex; align-items: center; }
-        .nav-links a { color: white; text-decoration: none; margin-left: 25px; font-size: 14px; font-weight: 600; cursor: pointer; }
+        .logo { font-weight: 800; font-size: 22px; cursor: pointer; }
+        .nav-links a { color: white; text-decoration: none; margin-left: 15px; font-size: 13px; cursor: pointer; }
 
-        .page { display: none; min-height: 100vh; padding-bottom: 80px; }
-        .active { display: block; animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
-        .card { background: var(--card-bg); padding: 30px; border-radius: 24px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); }
+        .page { display: none; min-height: 100vh; padding: 20px 5%; }
+        .active { display: block; }
 
-        /* HERO */
-        .hero {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 40px;
-            padding: 80px 0;
-        }
-        .hero h1 { font-size: 54px; line-height: 1.1; }
-        .hero p { font-size: 18px; margin: 20px 0; color: #555; }
-        .hero-img {
-            width: 420px;
-            border-radius: 30px;
-            animation: float 4s ease-in-out infinite;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
-        }
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0px); }
+        /* Toast Notifications */
+        #toast-container { position: fixed; top: 80px; right: 20px; z-index: 9999; }
+        .toast { 
+            background: var(--text-dark); color: white; padding: 15px 25px; 
+            border-radius: 10px; margin-bottom: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            animation: slideIn 0.3s ease-out;
         }
 
-        .badge { display: inline-block; padding: 4px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; }
-        .badge-pro { background: linear-gradient(90deg, #f1c40f, #f39c12); color: white; }
-        .badge-cat { background: var(--primary); color: white; }
-
-        .level-bar { height: 10px; background: #eee; border-radius: 5px; margin: 10px 0; overflow: hidden; }
-        .level-progress { height: 100%; background: var(--success); transition: 0.5s; }
-
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; align-items: center; justify-content: center; }
-        .modal-content { background: white; padding: 40px; border-radius: 30px; width: 90%; max-width: 500px; }
-
-        .btn { padding: 16px 25px; border-radius: 14px; border: none; font-weight: 700; cursor: pointer; }
-        .btn-main { background: var(--primary); color: white; }
-        .btn-ghost { background: #f3f4f6; }
-
-        .input-group input, .input-group select, .input-group textarea {
-            width: 100%; padding: 16px; border-radius: 14px; border: none; background: var(--input-bg);
+        /* Filter & Search Bar */
+        .controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+        .controls input, .controls select { 
+            padding: 12px; border-radius: 10px; border: 1px solid #ddd; flex: 1; min-width: 150px;
         }
 
-        #toasts { position: fixed; top: 100px; right: 20px; }
-        .toast { background: var(--primary); color: white; padding: 15px 25px; border-radius: 12px; margin-bottom: 10px; }
+        /* Cards */
+        .order-card { 
+            background: white; padding: 20px; border-radius: 15px; margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-left: 5px solid var(--primary-purple);
+        }
+        .status-tag { display: inline-block; padding: 4px 8px; border-radius: 5px; font-size: 11px; font-weight: 700; margin-top: 5px; }
+        .status-open { background: #e1f5fe; color: #0288d1; }
+        .status-taken { background: #fff3e0; color: #f57c00; }
+        .status-completed { background: #e8f5e9; color: #388e3c; }
+
+        /* Rating Stars */
+        .rating { color: #f1c40f; cursor: pointer; font-size: 20px; }
+
+        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+
+        /* Hero Mobile Fix */
+        @media (max-width: 768px) {
+            .hero { flex-direction: column; text-align: center; }
+            .hero-content { padding: 40px 20px; }
+            .hero h1 { font-size: 32px; }
+            .hero-image-section { display: none; }
+            .business-section { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
 
-<div id="toasts"></div>
+<div id="toast-container"></div>
 
 <nav>
     <div class="logo" onclick="showPage('home')">worklink</div>
-    <div class="nav-links">
-        <a onclick="showPage('home')">Главная</a>
-        <a onclick="showPage('profile')">Профиль</a>
-        <a onclick="showPage('worker_panel')">Работа</a>
+    <div class="nav-links" id="guestNav">
+        <a onclick="showPage('about')">О нас</a>
+        <a onclick="showPage('login')">Вход</a>
+    </div>
+    <div class="nav-links" id="userNav" style="display:none">
+        <a id="panelLink">Панель</a>
+        <a onclick="logout()">Выйти</a>
     </div>
 </nav>
 
-<!-- HOME -->
 <div id="home" class="page active">
-    <div class="container hero">
-        <div>
-            <h1>Работа будущего уже здесь</h1>
-            <p>Опыт = деньги. Рейтинг = статус. Добро пожаловать в новую экономику.</p>
-            <button class="btn btn-main" onclick="showPage('register')">Начать</button>
-        </div>
-        <img class="hero-img" src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d" alt="hero">
+    <div style="text-align: center; padding-top: 50px;">
+        <h1>WorkLink</h1>
+        <p>Сервис быстрого поиска исполнителей</p>
+        <button onclick="showPage('register')" style="margin-top:20px; padding:15px 30px; border-radius:10px; border:none; background:var(--primary-purple); color:white; font-weight:700">Начать работу</button>
     </div>
 </div>
 
-<!-- PROFILE -->
-<div id="profile" class="page">
-<div class="container">
-    <div class="card">
-        <h2>Профиль</h2>
-        <p>Уровень: <span id="levelText">1</span></p>
-        <div class="level-bar"><div id="levelProgress" class="level-progress" style="width:10%"></div></div>
-        <button class="btn btn-main" onclick="addFundsBusiness()">Пополнить (Бизнес)</button>
+<div id="about" class="page">
+    <div style="background:white; padding:30px; border-radius:20px;">
+        <h2>Что такое WorkLink</h2>
+        <p>Это платформа для бизнеса и самозанятых. Бизнес находит сотрудников, а люди — подработку рядом с домом.</p>
     </div>
 </div>
+
+<div id="register" class="page">
+    <div style="max-width:400px; margin:auto; background:white; padding:30px; border-radius:20px;">
+        <h2>Регистрация</h2>
+        <input type="text" id="regPhone" placeholder="Телефон" style="width:100%; padding:12px; margin:10px 0;">
+        <input type="password" id="regPass" placeholder="Пароль" style="width:100%; padding:12px; margin:10px 0;">
+        <select id="regRole" style="width:100%; padding:12px; margin:10px 0;">
+            <option value="worker">Работник</option>
+            <option value="business">Бизнес</option>
+        </select>
+        <button onclick="handleAuth('reg')" style="width:100%; padding:15px; background:var(--primary-purple); color:white; border:none; border-radius:10px; font-weight:700">Создать аккаунт</button>
+    </div>
 </div>
 
-<div id="worker_panel" class="page"><div class="container">
-<h2>Задачи</h2>
-<div id="jobList"></div>
-</div></div>
-
-<div id="chatModal" class="modal">
-<div class="modal-content">
-<h2>Чат</h2>
-<textarea style="width:100%; height:200px;"></textarea>
-<button class="btn btn-main" onclick="closeModal()">Закрыть</button>
+<div id="login" class="page">
+    <div style="max-width:400px; margin:auto; background:white; padding:30px; border-radius:20px;">
+        <h2>Вход</h2>
+        <input type="text" id="logPhone" placeholder="Телефон" style="width:100%; padding:12px; margin:10px 0;">
+        <input type="password" id="logPass" placeholder="Пароль" style="width:100%; padding:12px; margin:10px 0;">
+        <button onclick="handleAuth('log')" style="width:100%; padding:15px; background:var(--primary-purple); color:white; border:none; border-radius:10px; font-weight:700">Войти</button>
+    </div>
 </div>
+
+<div id="worker_panel" class="page">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <h2>Поиск работы</h2>
+        <button onclick="showPage('my_jobs')" style="padding:10px; border-radius:10px; border:none; background:var(--text-dark); color:white;">Мои заказы</button>
+    </div>
+    
+    <div class="controls">
+        <input type="text" id="searchJob" placeholder="Поиск по названию..." oninput="filterOrders()">
+        <input type="text" id="searchCity" placeholder="Город..." oninput="filterOrders()">
+        <select id="priceFilter" onchange="filterOrders()">
+            <option value="new">Сначала новые</option>
+            <option value="expensive">Сначала дорогие</option>
+        </select>
+    </div>
+    <div id="available_orders"></div>
+</div>
+
+<div id="my_jobs" class="page">
+    <button onclick="showPage('worker_panel')" style="margin-bottom:20px;">← Назад</button>
+    <h2>Мои принятые задачи</h2>
+    <div id="my_orders_list"></div>
+</div>
+
+<div id="business_panel" class="page">
+    <h2>Ваши заказы</h2>
+    <button onclick="showPage('create_order_page')" style="width:100%; padding:15px; margin:20px 0; background:var(--primary-purple); color:white; border:none; border-radius:10px;">+ Создать новый заказ</button>
+    <div id="business_orders_list"></div>
+</div>
+
+<div id="create_order_page" class="page">
+    <button onclick="showPage('business_panel')">← Отмена</button>
+    <div style="max-width:500px; margin:20px auto; background:white; padding:30px; border-radius:20px;">
+        <h3>Детали заказа</h3>
+        <input type="text" id="ordTitle" placeholder="Название (напр. Грузчик)" style="width:100%; margin:10px 0; padding:12px;">
+        <input type="number" id="ordPrice" placeholder="Оплата ₸" style="width:100%; margin:10px 0; padding:12px;">
+        <input type="text" id="ordCity" placeholder="Город" style="width:100%; margin:10px 0; padding:12px;">
+        <button onclick="createOrder()" style="width:100%; padding:15px; background:var(--success); color:white; border:none; border-radius:10px;">Опубликовать</button>
+    </div>
 </div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getDatabase, ref, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getDatabase, ref, push, set, get, child, onValue, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-const app = initializeApp({
-apiKey:"X",
-databaseURL:"https://worklink-5384c-default-rtdb.firebaseio.com"
-});
-const db=getDatabase(app);
+    const firebaseConfig = {
+        apiKey: "AIzaSyAjSLp9bkzKz71GytZU1Jz5bQoNMKB5Fxo",
+        authDomain: "worklink-5384c.firebaseapp.com",
+        databaseURL: "https://worklink-5384c-default-rtdb.firebaseio.com/",
+        projectId: "worklink-5384c",
+        storageBucket: "worklink-5384c.firebasestorage.app",
+        appId: "1:582114312352:web:08dea19f81f35abfe649c5"
+    };
 
-let user=JSON.parse(localStorage.getItem('wl_session'));
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    let currentUser = JSON.parse(localStorage.getItem('wl_user')) || null;
 
-window.addFundsBusiness = async () => {
-    if(!user || user.role!=='business') return alert('Только бизнес аккаунт');
-    let amt = prompt('Сумма пополнения');
-    amt = Number(amt);
-    if(!amt) return;
-    await update(ref(db,'users/'+user.phone), { balance: (user.balance||0)+amt });
-    alert('Баланс пополнен');
-};
+    function toast(text) {
+        const container = document.getElementById('toast-container');
+        const t = document.createElement('div');
+        t.className = 'toast';
+        t.innerText = text;
+        container.appendChild(t);
+        setTimeout(() => t.remove(), 3000);
+    }
 
-window.completeJob = async (id, exp=20) => {
-    await update(ref(db,'orders/'+id), {status:'done'});
-    await update(ref(db,'users/'+user.phone), { exp: (user.exp||0)+exp });
-};
+    window.showPage = (id) => {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        window.scrollTo(0,0);
+    };
 
-window.showPage=(id)=>{
-    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-};
+    window.handleAuth = async (type) => {
+        const phone = document.getElementById(type === 'reg' ? 'regPhone' : 'logPhone').value;
+        const pass = document.getElementById(type === 'reg' ? 'regPass' : 'logPass').value;
+        
+        if (type === 'reg') {
+            const role = document.getElementById('regRole').value;
+            await set(ref(db, 'users/' + phone), { phone, password: pass, role });
+            toast("Регистрация успешна!");
+            showPage('login');
+        } else {
+            const snap = await get(child(ref(db), `users/${phone}`));
+            if(snap.exists() && snap.val().password === pass) {
+                currentUser = snap.val();
+                localStorage.setItem('wl_user', JSON.stringify(currentUser));
+                initUser();
+            } else toast("Ошибка входа!");
+        }
+    };
 
-window.closeModal=()=>document.getElementById('chatModal').style.display='none';
+    function initUser() {
+        if(!currentUser) return;
+        document.getElementById('guestNav').style.display = 'none';
+        document.getElementById('userNav').style.display = 'flex';
+        const link = document.getElementById('panelLink');
+        if(currentUser.role === 'business') {
+            link.onclick = () => showPage('business_panel');
+            loadBusinessOrders();
+        } else {
+            link.onclick = () => showPage('worker_panel');
+            loadWorkerOrders();
+        }
+        showPage(currentUser.role === 'business' ? 'business_panel' : 'worker_panel');
+    }
 
+    // БИЗНЕС ЛОГИКА
+    window.createOrder = async () => {
+        const title = document.getElementById('ordTitle').value;
+        const price = Number(document.getElementById('ordPrice').value);
+        const city = document.getElementById('ordCity').value;
+        await push(ref(db, 'orders'), { 
+            title, price, city, 
+            status: 'open', 
+            owner: currentUser.phone,
+            timestamp: Date.now() 
+        });
+        toast("Заказ опубликован!");
+        showPage('business_panel');
+    };
+
+    function loadBusinessOrders() {
+        onValue(ref(db, 'orders'), (snap) => {
+            const list = document.getElementById('business_orders_list');
+            list.innerHTML = "";
+            const data = snap.val();
+            for(let id in data) {
+                if(data[id].owner === currentUser.phone) {
+                    const el = document.createElement('div');
+                    el.className = 'order-card';
+                    let workerInfo = data[id].worker ? `<br><b>Исполнитель:</b> ${data[id].worker}` : '';
+                    let ratingHtml = data[id].status === 'completed' && !data[id].rating ? 
+                        `<div class="rating" onclick="rateWorker('${id}')">☆☆☆☆☆ (Оценить)</div>` : '';
+                    
+                    el.innerHTML = `
+                        <h3>${data[id].title}</h3>
+                        <p>${data[id].price} ₸ | ${data[id].city}</p>
+                        <span class="status-tag status-${data[id].status}">${data[id].status.toUpperCase()}</span>
+                        ${workerInfo}
+                        ${ratingHtml}
+                    `;
+                    list.appendChild(el);
+                }
+            }
+        });
+    }
+
+    // РАБОТНИК ЛОГИКА
+    function loadWorkerOrders() {
+        onValue(ref(db, 'orders'), (snap) => {
+            const data = snap.val();
+            window.allOrders = data;
+            filterOrders();
+            renderMyJobs(data);
+        });
+    }
+
+    window.filterOrders = () => {
+        const query = document.getElementById('searchJob').value.toLowerCase();
+        const cityQuery = document.getElementById('searchCity').value.toLowerCase();
+        const sort = document.getElementById('priceFilter').value;
+        const list = document.getElementById('available_orders');
+        list.innerHTML = "";
+
+        let filtered = Object.keys(window.allOrders || {}).map(id => ({id, ...window.allOrders[id]}))
+            .filter(o => o.status === 'open' && o.title.toLowerCase().includes(query) && o.city.toLowerCase().includes(cityQuery));
+
+        if(sort === 'expensive') filtered.sort((a,b) => b.price - a.price);
+        else filtered.sort((a,b) => b.timestamp - a.timestamp);
+
+        filtered.forEach(o => {
+            const el = document.createElement('div');
+            el.className = 'order-card';
+            el.innerHTML = `
+                <h3>${o.title}</h3>
+                <p style="color:var(--primary-purple); font-weight:700">${o.price} ₸</p>
+                <p>📍 ${o.city}</p>
+                <button onclick="takeJob('${o.id}')" style="margin-top:10px; width:100%; padding:10px; border-radius:8px; border:none; background:var(--success); color:white;">Принять работу</button>
+            `;
+            list.appendChild(el);
+        });
+    };
+
+    function renderMyJobs(data) {
+        const list = document.getElementById('my_orders_list');
+        list.innerHTML = "";
+        for(let id in data) {
+            if(data[id].worker === currentUser.phone && data[id].status === 'taken') {
+                const el = document.createElement('div');
+                el.className = 'order-card';
+                el.innerHTML = `
+                    <h3>${data[id].title}</h3>
+                    <p>${data[id].price} ₸</p>
+                    <button onclick="completeJob('${id}')" style="width:100%; padding:10px; background:var(--text-dark); color:white; border-radius:8px; border:none; margin-top:10px;">Завершить работу</button>
+                `;
+                list.appendChild(el);
+            }
+        }
+    }
+
+    window.takeJob = async (id) => {
+        await update(ref(db, `orders/${id}`), { status: 'taken', worker: currentUser.phone });
+        toast("Заказ добавлен в 'Мои заказы'!");
+    };
+
+    window.completeJob = async (id) => {
+        await update(ref(db, `orders/${id}`), { status: 'completed' });
+        toast("Работа завершена! Ожидайте оценки.");
+    };
+
+    window.rateWorker = async (id) => {
+        const stars = prompt("Оцените работника от 1 до 5:");
+        if(stars >= 1 && stars <= 5) {
+            await update(ref(db, `orders/${id}`), { rating: stars });
+            toast("Спасибо за оценку!");
+        }
+    };
+
+    window.logout = () => { localStorage.clear(); location.reload(); };
+
+    if(currentUser) initUser();
 </script>
-
 </body>
 </html>
